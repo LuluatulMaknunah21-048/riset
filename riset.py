@@ -4,6 +4,8 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 import os
+from datetime import datetime
+import time
 
 # Fungsi untuk mendownload model dari Google Drive
 @st.cache_resource
@@ -29,11 +31,26 @@ def preprocess_image(image, target_size=(224, 224)):
     img_array = np.expand_dims(img_array, axis=0)  # Tambahkan dimensi batch
     return img_array
 
-# Sidebar untuk navigasi
-st.sidebar.title("Menu")
-app_mode = st.sidebar.selectbox("Pilih Mode", ["Home", "Petunjuk", "Tentang"])
+# Fungsi untuk menampilkan tanggal dan jam saat ini
+def get_current_datetime():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Format: Tahun-Bulan-Hari Jam:Menit:Detik
 
-if app_mode == "Home":
+# Sidebar untuk navigasi dan menampilkan tanggal dan jam
+st.sidebar.title("Selamat Datang!")
+
+# Menampilkan tanggal dan jam di sidebar
+time_display = st.sidebar.empty()  # Tempat untuk menampilkan tanggal dan jam
+# Pilih menu
+app_mode = st.sidebar.selectbox("Pilih Menu", ["Klasifikasi", "Petunjuk", "Tentang"])
+
+# Loop untuk memperbarui tanggal dan jam setiap detik
+while True:
+    # Update waktu dan tanggal di sidebar
+    time_display.write(f"Pada: {get_current_datetime()}")
+    time.sleep(1)  # Perbarui setiap 1 detik
+
+
+if app_mode == "Klasifikasi":
     # Judul aplikasi
     st.title("KLASIFIKASI CITRA CHEST X-RAY MENGGUNAKAN KOMBINASI EFFICIENTNET DAN EFFICIENT CHANNEL ATTENTION (ECA) ")
     st.text("Aplikasi ini menggunakan arsitektur EfficientNet-B0.")
@@ -82,7 +99,7 @@ if app_mode == "Home":
 elif app_mode == "Petunjuk":
     st.title("Petunjuk Penggunaan")
     st.write("""
-        1. Pilih menu **Home** untuk mengunggah Citra Chest X-Ray.
+        1. Pilih menu **Klasifikasi** untuk mengunggah Citra Chest X-Ray.
         2. Pilih Citra Chest X-Ray yang ingin Anda klasifikasikan.
         3. Aplikasi ini akan memberikan prediksi apakah gambar tersebut termasuk **COVID-19**, **Pneumonia**, atau **Normal**.
         4. Hasil prediksi akan menunjukkan nama kelas dan tingkat kepercayaan model.
