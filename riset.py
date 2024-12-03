@@ -31,17 +31,18 @@ def preprocess_image(image, target_size=(224, 224)):
     img_array = np.expand_dims(img_array, axis=0)  # Tambahkan dimensi batch
     return img_array
 
-# Fungsi untuk mendapatkan tanggal dan jam Indonesia (WIB)
-def get_current_datetime():
+# Fungsi untuk mendapatkan tanggal Indonesia (WIB)
+def get_current_date():
     indonesia_tz = pytz.timezone('Asia/Jakarta')
     datetime_indonesia = datetime.now(indonesia_tz)
-    return datetime_indonesia.strftime("%Y-%m-%d %H:%M:%S")  # Format: Tahun-Bulan-Hari Jam:Menit:Detik
+    return datetime_indonesia.strftime("%Y-%m-%d")  # Format: Tahun-Bulan-Hari
 
 # Sidebar untuk navigasi
 st.sidebar.title("Selamat Datang!")
-# Menampilkan tanggal dan waktu di sidebar
-current_time = get_current_datetime()
-st.sidebar.write(f"Tanggal dan Waktu: **{current_time}**")
+
+# Tampilkan tanggal di sidebar
+current_date = get_current_date()
+st.sidebar.write(f"Tanggal: **{current_date}**")
 
 # Pilih menu
 app_mode = st.sidebar.selectbox("Pilih Menu", ["Klasifikasi", "Petunjuk", "Tentang"])
