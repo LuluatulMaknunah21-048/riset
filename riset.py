@@ -30,20 +30,20 @@ def preprocess_image(image, target_size=(224, 224)):
     return img_array
 
 # Sidebar untuk navigasi
-st.sidebar.title("Navigasi")
+st.sidebar.title("Menu")
 app_mode = st.sidebar.selectbox("Pilih Mode", ["Home", "Petunjuk", "Tentang"])
 
 if app_mode == "Home":
     # Judul aplikasi
-    st.title("Klasifikasi COVID-19, Pneumonia, dan Normal")
-    st.text("Aplikasi ini menggunakan model EfficientNet untuk mengklasifikasikan gambar X-Ray.")
+    st.title("KLASIFIKASI CITRA CHEST X-RAY MENGGUNAKAN KOMBINASI EFFICIENTNET DAN EFFICIENT CHANNEL ATTENTION (ECA) ")
+    st.text("Aplikasi ini menggunakan arsitektur EfficientNet-B0.")
 
     # Unduh model
-    st.write("Mengunduh model dari Google Drive...")
+    #st.write("Mengunduh model dari Google Drive...")
     model_path = download_model()
 
     # Muat model
-    st.write("Memuat model...")
+    #st.write("Memuat model...")
     model = load_model(model_path)
 
     # Upload gambar
@@ -82,7 +82,7 @@ if app_mode == "Home":
 elif app_mode == "Petunjuk":
     st.title("Petunjuk Penggunaan")
     st.write("""
-        1. Pilih menu **Home** untuk mengunggah gambar X-Ray.
+        1. Pilih menu **Home** untuk mengunggah Citra Chest X-Ray.
         2. Pilih Citra Chest X-Ray yang ingin Anda klasifikasikan.
         3. Aplikasi ini akan memberikan prediksi apakah gambar tersebut termasuk **COVID-19**, **Pneumonia**, atau **Normal**.
         4. Hasil prediksi akan menunjukkan nama kelas dan tingkat kepercayaan model.
@@ -100,4 +100,4 @@ elif app_mode == "Tentang":
         oleh : <br>
         Lu'luatul Maknunah 210411100048 <br>
         Dosen Pembimbing Riset : Prof. Dr. Rima Tri Wahyuningrum, S.T., MT.
-    """)
+    """, unsafe_allow_html=True)
