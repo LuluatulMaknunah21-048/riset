@@ -5,8 +5,8 @@ from PIL import Image
 import numpy as np
 import os
 from datetime import datetime
-import time
 import pytz
+import time
 
 # Fungsi untuk mendownload model dari Google Drive
 @st.cache_resource
@@ -44,81 +44,79 @@ st.sidebar.title("Selamat Datang!")
 
 # Menampilkan tanggal dan jam di sidebar
 time_display = st.sidebar.empty()  # Tempat untuk menampilkan tanggal dan jam
+
 # Pilih menu
 app_mode = st.sidebar.selectbox("Pilih Menu", ["Klasifikasi", "Petunjuk", "Tentang"])
 
-# Loop untuk memperbarui tanggal dan jam setiap detik
+# Update waktu dan tanggal di sidebar setiap detik
 while True:
-    # Update waktu dan tanggal di sidebar
-    time_display.write(f"Pada: {get_current_datetime()}")
-    time.sleep(1)  # Perbarui setiap 1 detik
+    # Update waktu dan tanggal
+    current_time = get_current_datetime()
+    time_display.write(f"Pada: {current_time}")
 
+    # Menampilkan konten sesuai pilihan menu
+    if app_mode == "Klasifikasi":
+        st.title("KLASIFIKASI CITRA CHEST X-RAY MENGGUNAKAN KOMBINASI EFFICIENTNET DAN EFFICIENT CHANNEL ATTENTION (ECA) ")
+        st.text("Aplikasi ini menggunakan arsitektur EfficientNet-B0.")
+    
+        # Unduh model
+        model_path = download_model()
 
-if app_mode == "Klasifikasi":
-    # Judul aplikasi
-    st.title("KLASIFIKASI CITRA CHEST X-RAY MENGGUNAKAN KOMBINASI EFFICIENTNET DAN EFFICIENT CHANNEL ATTENTION (ECA) ")
-    st.text("Aplikasi ini menggunakan arsitektur EfficientNet-B0.")
+        # Muat model
+        model = load_model(model_path)
 
-    # Unduh model
-    #st.write("Mengunduh model dari Google Drive...")
-    model_path = download_model()
+        # Upload gambar
+        uploaded_file = st.file_uploader("Unggah gambar X-Ray Anda", type=["jpg", "png", "jpeg"])
 
-    # Muat model
-    #st.write("Memuat model...")
-    model = load_model(model_path)
+        if uploaded_file is not None:
+            # Tampilkan gambar yang diunggah
+            st.image(uploaded_file, caption="Gambar yang diunggah", use_column_width=True)
 
-    # Upload gambar
-    uploaded_file = st.file_uploader("Unggah gambar X-Ray Anda", type=["jpg", "png", "jpeg"])
+            try:
+                # Proses gambar
+                image = Image.open(uploaded_file).convert("RGB")  # Pastikan gambar diubah ke RGB
+                processed_image = preprocess_image(image)
 
-    if uploaded_file is not None:
-        # Tampilkan gambar yang diunggah
-        st.image(uploaded_file, caption="Gambar yang diunggah", use_column_width=True)
+                # Debugging bentuk input
+                st.write(f"Bentuk input gambar: {processed_image.shape}")
 
-        try:
-            # Proses gambar
-            image = Image.open(uploaded_file).convert("RGB")  # Pastikan gambar diubah ke RGB
-            processed_image = preprocess_image(image)
+                # Label yang sesuai dengan kelas yang digunakan saat pelatihan (berurutan secara alfabet)
+                labels = ['COVID-19', 'Normal', 'Pneumonia']  # Urutan berdasarkan alfabet
 
-            # Debugging bentuk input
-            st.write(f"Bentuk input gambar: {processed_image.shape}")
+                # Prediksi dengan model (output model berupa probabilitas untuk setiap kelas)
+                prediction = model.predict(processed_image)
 
-            # Label yang sesuai dengan kelas yang digunakan saat pelatihan (berurutan secara alfabet)
-            labels = ['COVID-19', 'Normal', 'Pneumonia']  # Urutan berdasarkan alfabet
+                # Ambil indeks kelas dengan probabilitas tertinggi
+                predicted_class_index = np.argmax(prediction)
 
-            # Prediksi dengan model (output model berupa probabilitas untuk setiap kelas)
-            prediction = model.predict(processed_image)
+                # Menampilkan nama kelas sesuai dengan label
+                predicted_class = labels[predicted_class_index]
 
-            # Ambil indeks kelas dengan probabilitas tertinggi
-            predicted_class_index = np.argmax(prediction)
+                # Menampilkan hasil prediksi di Streamlit
+                st.write(f"Prediksi: **{predicted_class}**")
+                st.write(f"Confidence: {np.max(prediction) * 100:.2f}%")
+            except Exception as e:
+                st.error(f"Terjadi kesalahan: {e}")
 
-            # Menampilkan nama kelas sesuai dengan label
-            predicted_class = labels[predicted_class_index]
+    elif app_mode == "Petunjuk":
+        st.title("Petunjuk Penggunaan")
+        st.write("""
+            1. Pilih menu **Klasifikasi** untuk mengunggah Citra Chest X-Ray.
+            2. Pilih Citra Chest X-Ray yang ingin Anda klasifikasikan.
+            3. Aplikasi ini akan memberikan prediksi apakah gambar tersebut termasuk **COVID-19**, **Pneumonia**, atau **Normal**.
+            4. Hasil prediksi akan menunjukkan nama kelas dan tingkat kepercayaan model.
+        """)
 
-            # Menampilkan hasil prediksi di Streamlit
-            st.write(f"Prediksi: **{predicted_class}**")
-            st.write(f"Confidence: {np.max(prediction) * 100:.2f}%")
-        except Exception as e:
-            st.error(f"Terjadi kesalahan: {e}")
-
-elif app_mode == "Petunjuk":
-    st.title("Petunjuk Penggunaan")
-    st.write("""
-        1. Pilih menu **Klasifikasi** untuk mengunggah Citra Chest X-Ray.
-        2. Pilih Citra Chest X-Ray yang ingin Anda klasifikasikan.
-        3. Aplikasi ini akan memberikan prediksi apakah gambar tersebut termasuk **COVID-19**, **Pneumonia**, atau **Normal**.
-        4. Hasil prediksi akan menunjukkan nama kelas dan tingkat kepercayaan model.
-    """)
-
-elif app_mode == "Tentang":
-    st.title("Tentang Aplikasi")
-    st.write("""
-        Aplikasi ini menggunakan model **EfficientNetB0** yang telah dilatih untuk mengklasifikasikan Chest X-Ray menjadi tiga kelas:
-        - **COVID-19**
-        - **Pneumonia**
-        - **Normal**
-    """)
-    st.write("""
-        oleh : <br>
-        Lu'luatul Maknunah 210411100048 <br>
-        Dosen Pembimbing Riset : Prof. Dr. Rima Tri Wahyuningrum, S.T., MT.
-    """, unsafe_allow_html=True)
+    elif app_mode == "Tentang":
+        st.title("Tentang Aplikasi")
+        st.write("""
+            Aplikasi ini menggunakan model **EfficientNetB0** yang telah dilatih untuk mengklasifikasikan Chest X-Ray menjadi tiga kelas:
+            - **COVID-19**
+            - **Pneumonia**
+            - **Normal**
+        """)
+        st.write("""
+            oleh : <br>
+            Lu'luatul Maknunah 210411100048 <br>
+            Dosen Pembimbing Riset : Prof. Dr. Rima Tri Wahyuningrum, S.T., MT.
+        """, unsafe_allow_html=True)
