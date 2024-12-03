@@ -1,49 +1,64 @@
 import streamlit as st
+import gdown
 import os
+from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.models import load_model
 
-# Fungsi untuk memuat dan memproses gambar input (hanya resizing)
-def load_and_process_image(img):
-    img = img.resize((224, 224))  # Sesuaikan ukuran gambar dengan input model
-    img_array = np.array(img)  # Ubah gambar menjadi array NumPy
-    img_array = np.expand_dims(img_array, axis=0)  # Tambah batch dimension
-    return img_array
-
-# Fungsi untuk memuat model yang sudah dilatih
+# Fungsi untuk mengunduh model dari Google Drive
 @st.cache_resource
-def load_trained_model(model_path):
-    model = load_model(model_path)
-    return model
+def download_model_from_gdrive(file_id, output):
+    """
+    Mengunduh file model dari Google Drive menggunakan ID file.
+    """
+    if not os.path.exists(output):  # Cek apakah file sudah ada
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, output, quiet=False)
+    return output
 
-# Menyiapkan aplikasi Streamlit
-st.title("Klasifikasi X-ray: COVID-19, Pneumonia, atau Normal")
-st.write("Aplikasi ini dapat mengklasifikasikan gambar X-ray menjadi salah satu dari tiga kelas: COVID-19, Pneumonia, atau Normal.")
+# Fungsi untuk memproses gambar
+def preprocess_image(image, target_size=(224, 224)):
+    """
+    Memproses gambar untuk prediksi model.
+    """
+    image = image.resize(target_size)  # Resize gambar ke ukuran target
+    image_array = np.array(image)  # Ubah menjadi array NumPy
+    image_array = np.expand_dims(image_array, axis=0)  # Tambahkan dimensi batch
+    return image_array / 255.0  # Normalisasi piksel ke [0, 1]
 
-# Upload gambar X-ray
-uploaded_image = st.file_uploader("Pilih gambar X-ray untuk diklasifikasikan", type=["jpg", "png", "jpeg"])
+# ID file Google Drive (ganti dengan ID Anda)
+FILE_ID = "1--XGx1vFU-VvlvPBed39Z40ehGv-Uttr"  # ID dari URL Google Drive
+MODEL_PATH = "best_model.keras"  # Nama file lokal untuk menyimpan model
 
-if uploaded_image is not None:
-    # Menampilkan gambar yang diupload
-    img = Image.open(uploaded_image)
-    st.image(img, caption="Gambar X-ray yang diupload", use_column_width=True)
-    
-    # Memproses gambar untuk prediksi (hanya resizing)
-    processed_image = load_and_process_image(img)
-    
-    # Memuat model yang sudah dilatih
-    model_path = 'best_eff_adam.keras'  # Ganti dengan path model Anda
-    model = load_trained_model(model_path)
+# Unduh model
+st.write("Mengunduh model dari Google Drive...")
+model_file = download_model_from_gdrive(FILE_ID, MODEL_PATH)
 
-    # Melakukan prediksi
+# Memuat model
+st.write("Memuat model...")
+model = load_model(model_file)
+st.success("Model berhasil dimuat!")
+
+# Streamlit interface
+st.title("Klasifikasi X-ray: COVID-19, Pneumonia, Normal")
+uploaded_file = st.file_uploader("Upload gambar X-ray", type=["jpg", "jpeg", "png"])
+
+if uploaded_file is not None:
+    # Menampilkan gambar yang diunggah
+    image = Image.open(uploaded_file)
+    st.image(image, caption="Gambar X-ray yang diunggah", use_column_width=True)
+
+    # Memproses gambar
+    processed_image = preprocess_image(image)
+
+    # Prediksi menggunakan model
     prediction = model.predict(processed_image)
-    
-    # Menampilkan hasil prediksi
-    class_names = ['COVID-19', 'Pneumonia', 'Normal']
+    class_names = ["COVID-19", "Pneumonia", "Normal"]
     predicted_class = class_names[np.argmax(prediction)]
 
-    st.write(f"Prediksi: {predicted_class}")
-    st.write(f"Probabilitas: {np.max(prediction) * 100:.2f}%")
+    # Menampilkan hasil prediksi
+    st.subheader("Hasil Prediksi:")
+    st.write(f"Kelas: {predicted_class}")
+    st.write("Probabilitas untuk setiap kelas:")
+    for i, class_name in enumerate(class_names):
+        st.write(f"{class_name}: {prediction[0][i]:.2f}")
