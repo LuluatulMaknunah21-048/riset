@@ -26,7 +26,6 @@ def preprocess_image(image, target_size=(224, 224)):
     img_array = np.array(image)  # Convert ke numpy array
     if img_array.shape[-1] != 3:  # Pastikan ada 3 channel (RGB)
         raise ValueError("Gambar harus memiliki 3 channel (RGB).")
-    img_array = img_array / 255.0  # Normalisasi
     img_array = np.expand_dims(img_array, axis=0)  # Tambahkan dimensi batch
     return img_array
 
@@ -58,12 +57,13 @@ if uploaded_file is not None:
         st.write(f"Bentuk input gambar: {processed_image.shape}")
 
         # Prediksi dengan model
+        # Misalkan Anda menggunakan sklearn model dan sudah melatih model
+        # Dan model memiliki atribut `classes_`
         prediction = model.predict(processed_image)
-        classes = ["COVID-19", "Pneumonia", "Normal"]
-        predicted_class = classes[np.argmax(prediction)]
+        predicted_class = model.classes_[prediction[0]]
         
-        # Tampilkan hasil prediksi
         st.write(f"Prediksi: **{predicted_class}**")
+
         st.write(f"Confidence: {np.max(prediction) * 100:.2f}%")
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
