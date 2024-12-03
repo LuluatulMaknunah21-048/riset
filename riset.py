@@ -1,64 +1,69 @@
 import streamlit as st
 import gdown
-import os
-from tensorflow.keras.models import load_model
+import tensorflow as tf
 from PIL import Image
 import numpy as np
+import os
 
-# Fungsi untuk mengunduh model dari Google Drive
+# Fungsi untuk mendownload model dari Google Drive
 @st.cache_resource
-def download_model_from_gdrive(file_id, output):
-    """
-    Mengunduh file model dari Google Drive menggunakan ID file.
-    """
-    if not os.path.exists(output):  # Cek apakah file sudah ada
-        url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, output, quiet=False)
-    return output
+def download_model():
+    model_url = "https://drive.google.com/uc?id=1--XGx1vFU-VvlvPBed39Z40ehGv-Uttr"
+    output_path = "best_model.keras"
+    if not os.path.exists(output_path):
+        gdown.download(model_url, output_path, quiet=False)
+    return output_path
+
+# Fungsi untuk memuat model
+@st.cache_resource
+def load_model(model_path):
+    model = tf.keras.models.load_model(model_path)
+    return model
 
 # Fungsi untuk memproses gambar
 def preprocess_image(image, target_size=(224, 224)):
-    """
-    Memproses gambar untuk prediksi model.
-    """
-    image = image.resize(target_size)  # Resize gambar ke ukuran target
-    image_array = np.array(image)  # Ubah menjadi array NumPy
-    image_array = np.expand_dims(image_array, axis=0)  # Tambahkan dimensi batch
-    return image_array / 255.0  # Normalisasi piksel ke [0, 1]
+    image = image.resize(target_size)  # Resize ke target size
+    img_array = np.array(image)  # Convert ke numpy array
+    if img_array.shape[-1] != 3:  # Pastikan ada 3 channel (RGB)
+        raise ValueError("Gambar harus memiliki 3 channel (RGB).")
+    img_array = img_array / 255.0  # Normalisasi
+    img_array = np.expand_dims(img_array, axis=0)  # Tambahkan dimensi batch
+    return img_array
 
-# ID file Google Drive (ganti dengan ID Anda)
-FILE_ID = "1--XGx1vFU-VvlvPBed39Z40ehGv-Uttr"  # ID dari URL Google Drive
-MODEL_PATH = "best_model.keras"  # Nama file lokal untuk menyimpan model
+# Judul aplikasi
+st.title("Klasifikasi COVID-19, Pneumonia, dan Normal")
+st.text("Aplikasi ini menggunakan model EfficientNet untuk mengklasifikasikan gambar X-Ray.")
 
 # Unduh model
 st.write("Mengunduh model dari Google Drive...")
-model_file = download_model_from_gdrive(FILE_ID, MODEL_PATH)
+model_path = download_model()
 
-# Memuat model
+# Muat model
 st.write("Memuat model...")
-model = load_model(model_file)
-st.success("Model berhasil dimuat!")
+model = load_model(model_path)
 
-# Streamlit interface
-st.title("Klasifikasi X-ray: COVID-19, Pneumonia, Normal")
-uploaded_file = st.file_uploader("Upload gambar X-ray", type=["jpg", "jpeg", "png"])
+# Upload gambar
+uploaded_file = st.file_uploader("Unggah gambar X-Ray Anda", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    # Menampilkan gambar yang diunggah
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Gambar X-ray yang diunggah", use_column_width=True)
+    # Tampilkan gambar yang diunggah
+    st.image(uploaded_file, caption="Gambar yang diunggah", use_column_width=True)
+    
+    try:
+        # Proses gambar
+        image = Image.open(uploaded_file).convert("RGB")  # Pastikan gambar diubah ke RGB
+        processed_image = preprocess_image(image)
 
-    # Memproses gambar
-    processed_image = preprocess_image(image)
+        # Debugging bentuk input
+        st.write(f"Bentuk input gambar: {processed_image.shape}")
 
-    # Prediksi menggunakan model
-    prediction = model.predict(processed_image)
-    class_names = ["COVID-19", "Pneumonia", "Normal"]
-    predicted_class = class_names[np.argmax(prediction)]
-
-    # Menampilkan hasil prediksi
-    st.subheader("Hasil Prediksi:")
-    st.write(f"Kelas: {predicted_class}")
-    st.write("Probabilitas untuk setiap kelas:")
-    for i, class_name in enumerate(class_names):
-        st.write(f"{class_name}: {prediction[0][i]:.2f}")
+        # Prediksi dengan model
+        prediction = model.predict(processed_image)
+        classes = ["COVID-19", "Pneumonia", "Normal"]
+        predicted_class = classes[np.argmax(prediction)]
+        
+        # Tampilkan hasil prediksi
+        st.write(f"Prediksi: **{predicted_class}**")
+        st.write(f"Confidence: {np.max(prediction) * 100:.2f}%")
+    except Exception as e:
+        st.error(f"Terjadi kesalahan: {e}")
