@@ -6,6 +6,7 @@ import numpy as np
 import os
 from datetime import datetime
 import time
+import pytz
 
 # Fungsi untuk mendownload model dari Google Drive
 @st.cache_resource
@@ -31,9 +32,12 @@ def preprocess_image(image, target_size=(224, 224)):
     img_array = np.expand_dims(img_array, axis=0)  # Tambahkan dimensi batch
     return img_array
 
-# Fungsi untuk menampilkan tanggal dan jam saat ini
+# Fungsi untuk menampilkan tanggal dan jam Indonesia (WIB)
 def get_current_datetime():
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Format: Tahun-Bulan-Hari Jam:Menit:Detik
+    # Zona waktu Indonesia (Jakarta)
+    indonesia_tz = pytz.timezone('Asia/Jakarta')
+    datetime_indonesia = datetime.now(indonesia_tz)
+    return datetime_indonesia.strftime("%Y-%m-%d %H:%M:%S")  # Format: Tahun-Bulan-Hari Jam:Menit:Detik
 
 # Sidebar untuk navigasi dan menampilkan tanggal dan jam
 st.sidebar.title("Selamat Datang!")
