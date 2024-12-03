@@ -97,6 +97,7 @@ elif app_mode == "Tentang":
         - **Normal**
     """)
     st.write("""
-        Lu'luatul Maknunah 210411100048
+        oleh : <br>
+        Lu'luatul Maknunah 210411100048 <br>
         Dosen Pembimbing Riset : Prof. Dr. Rima Tri Wahyuningrum, S.T., MT.
     """)
