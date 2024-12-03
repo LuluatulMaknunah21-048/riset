@@ -1,17 +1,8 @@
+streamlit>=1.18.0
 gdown
-tensorflow>=2.16.0
+tensorflow>=2.16.0,<2.18.0
 pillow
-numpy
-streamlit==1.34.0
-numpy==1.22.4
-scikit-learn==1.2.2
-pandas==1.5.3
-joblib
-seaborn
-matplotlib
-plotly
-Pillow
+numpy>=1.26.0,<2.0.0
+altair
 streamlit-option-menu
-librosa
-pycaret
 
