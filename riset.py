@@ -57,13 +57,21 @@ if uploaded_file is not None:
         st.write(f"Bentuk input gambar: {processed_image.shape}")
 
         # Prediksi dengan model
-        # Misalkan Anda menggunakan sklearn model dan sudah melatih model
-        # Dan model memiliki atribut `classes_`
-        prediction = model.predict(processed_image)
-        predicted_class = model.classes_[prediction[0]]
-        
-        st.write(f"Prediksi: **{predicted_class}**")
 
+        # Label yang sesuai dengan kelas yang digunakan saat pelatihan (berurutan secara alfabet)
+        labels = ['COVID-19', 'Normal', 'Pneumonia']  # Urutan berdasarkan alfabet
+        
+        # Prediksi dengan model (output model berupa probabilitas untuk setiap kelas)
+        prediction = model.predict(processed_image)
+        
+        # Ambil indeks kelas dengan probabilitas tertinggi
+        predicted_class_index = np.argmax(prediction)
+        
+        # Menampilkan nama kelas sesuai dengan label
+        predicted_class = labels[predicted_class_index]
+        
+        # Menampilkan hasil prediksi di Streamlit
+        st.write(f"Prediksi: **{predicted_class}**")
         st.write(f"Confidence: {np.max(prediction) * 100:.2f}%")
     except Exception as e:
         st.error(f"Terjadi kesalahan: {e}")
