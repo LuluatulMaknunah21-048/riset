@@ -81,7 +81,7 @@ if uploaded_file is not None:
         f.write(uploaded_file.getbuffer())
     
     # Tampilkan gambar yang diunggah
-    st.image("temp_image.png", caption="Gambar yang diunggah", use_column_width=True)
+    st.image("temp_image.png", caption="Gambar yang diunggah", use_container_width=True)
     print(f"File yang diunggah disimpan sebagai temp_image.png")
 
     if os.path.exists("temp_image.png"):
