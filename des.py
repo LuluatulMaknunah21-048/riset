@@ -23,9 +23,9 @@ pca_url = 'https://drive.google.com/uc?id=1-NviIjOFmDaldOtJbJLBRYO8vH1qGm5R'
 ffnn_url = 'https://drive.google.com/uc?id=1-bh0Ce3ag9RIonvM8kkWTPDyUiXWthRA'
 
 # Define the paths where the files will be saved locally
-scaler_path = 'scaler.pkl'
-pca_model_path = 'pca.pkl'
-ffnn_model_path = 'ffnn.h5'
+scaler_path = 'scalerWithpca.pkl'
+pca_model_path = 'pca_best.pkl'
+ffnn_model_path = 'ffnnWithpca.h5'
 
 # Download the files
 download_file_from_drive(scaler_url, scaler_path)
