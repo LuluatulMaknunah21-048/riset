@@ -49,35 +49,32 @@ if os.path.exists(ffnn_model_path):
 else:
     print("FFNN model file is missing, cannot load the model.")
 
-# Upload gambar melalui Streamlit
-uploaded_file = st.file_uploader("Unggah gambar untuk prediksi", type=["png", "jpg", "jpeg", "bmp", "gif"])
+st.title("Ekstraksi Fitur Gambar dan Prediksi")
+
+uploaded_file = st.file_uploader("Unggah gambar", type=["png", "jpg", "jpeg", "bmp", "gif"])
 
 if uploaded_file is not None:
-    # Simpan gambar yang diunggah ke direktori sementara
+    # Simpan file yang diunggah sementara
     with open("temp_image.png", "wb") as f:
         f.write(uploaded_file.getbuffer())
-
-    st.image("temp_image.png", caption="Gambar yang diunggah", use_container_width=True)
+    
+    # Tampilkan gambar yang diunggah
+    st.image("temp_image.png", caption="Gambar yang diunggah", use_column_width=True)
+    print(f"File yang diunggah disimpan sebagai temp_image.png")
 
     if os.path.exists("temp_image.png"):
-        print("Image uploaded successfully.")
-        if st.button("Extract Features and Predict"):
+        print("Gambar berhasil diunggah.")
+        # Tombol untuk mengekstrak fitur dan melakukan prediksi
+        if st.button("Ekstrak Fitur dan Prediksi"):
             features = extract_features_from_image("temp_image.png")
             if features is not None:
-                st.write("Features extracted successfully.")
-
-        if features is not None:
-            # Standarisasi fitur
-            st.write("Standarisasi fitur...")
-            standardized_features = scaler.transform([features])
-
-            # Aplikasi PCA
-            st.write("Mengaplikasikan PCA...")
-            pca_features = pca.transform(standardized_features)
-
-            # Prediksi menggunakan FFNN
-            st.write("Melakukan prediksi...")
-            prediction = ffnn_model.predict(pca_features)
-
-            # Tampilkan hasil
-            st.write("Hasil prediksi:", prediction[0])
+                st.write("Fitur berhasil diekstrak.")
+                
+                # Gunakan scaler dan PCA untuk memproses fitur
+                scaled_features = scaler.transform([features])
+                pca_features = pca.transform(scaled_features)
+                
+                # Tambahkan kode prediksi di sini jika diperlukan, misalnya:
+                # prediction = some_model.predict(pca_features)
+                # st.write(f"Prediksi: {prediction}")
+                st.write("Fitur diproses dengan PCA dan scaling.")
