@@ -48,8 +48,30 @@ if os.path.exists(ffnn_model_path):
     ffnn_model = tf.keras.models.load_model(ffnn_model_path)
 else:
     print("FFNN model file is missing, cannot load the model.")
+def extract_features_from_image(img_path):
+    try:
+        # Pastikan path gambar benar
+        if not os.path.exists(img_path):
+            print(f"Gambar di path {img_path} tidak ditemukan.")
+            return None
 
-st.title("Ekstraksi Fitur Gambar dan Prediksi")
+        # Muat dan ubah ukuran gambar
+        img = load_img(img_path, target_size=(224, 224))  # Mengubah ukuran menjadi 224x224
+        img_array = img_to_array(img)  # Mengonversi gambar menjadi array numpy
+        img_array = np.expand_dims(img_array, axis=0)  # Menambah dimensi batch
+
+        # Periksa bentuk array gambar sebelum prediksi
+        print(f"Bentuk gambar setelah diproses: {img_array.shape}")
+
+        # Mengekstrak fitur menggunakan model
+        feature = ffnn_model.predict(img_array).flatten()  # Flatten menjadi vektor 1D
+        return feature
+
+    except Exception as e:
+        print(f"Gagal mengekstrak fitur: {e}")
+        return None
+
+st.title("klasifikasi")
 
 uploaded_file = st.file_uploader("Unggah gambar", type=["png", "jpg", "jpeg", "bmp", "gif"])
 
