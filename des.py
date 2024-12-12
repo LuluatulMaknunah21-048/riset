@@ -10,40 +10,40 @@ from sklearn.decomposition import PCA
 from sklearn.neural_network import MLPClassifier
 import joblib  # Ganti pickle dengan joblib
 
-# Load model ResNet50 pre-trained dengan GAP
-model = ResNet50(weights='imagenet', include_top=False, pooling='avg')
-
-# Fungsi untuk ekstraksi fitur dari satu gambar
-def extract_features_from_image(img_path):
+# Function to download file from Google Drive using gdown
+def download_file_from_drive(url, output_path):
     try:
-        # Load dan resize gambar
-        img = load_img(img_path, target_size=(224, 224))  # Memuat gambar dan mengubah ukurannya menjadi 224x224 (ukuran input ResNet50).
-        img_array = img_to_array(img)  # Ubah gambar ke array numpy
-        img_array = np.expand_dims(img_array, axis=0)  # Tambahkan dimensi batch
-
-        # Ekstraksi fitur
-        feature = model.predict(img_array).flatten()  # Vektor fitur 1D
-        return feature
-
+        gdown.download(url, output_path, quiet=False)
+        print(f"Downloaded {output_path} successfully.")
     except Exception as e:
-        st.error(f"Error processing {img_path}: {e}")
-        return None
+        print(f"Error downloading {output_path}: {e}")
 
-# Main Streamlit App
-st.title("Ekstraksi Fitur, PCA, dan Prediksi")
+# URLs of the files stored on Google Drive
+scaler_url = 'https://drive.google.com/uc?id=1-b1sbOb0iPMVbFL7mRAxFokC4yKLt8N4'
+pca_url = 'https://drive.google.com/uc?id=1-NviIjOFmDaldOtJbJLBRYO8vH1qGm5R'
+ffnn_url = 'https://drive.google.com/uc?id=1-bh0Ce3ag9RIonvM8kkWTPDyUiXWthRA'
 
-# Load scaler menggunakan joblib
-scaler_path = "path/to/scaler_model.pkl"  # Ganti dengan path file scaler Anda
-pca_model_path = "path/to/pca_model.pkl"  # Ganti dengan path file PCA Anda
-ffnn_model_path = "path/to/ffnn_model.h5"  # Ganti dengan path file FFNN Anda
+# Define the paths where the files will be saved locally
+scaler_path = 'scalerWithpca.pkl'
+pca_model_path = 'pca_best.pkl'
+ffnn_model_path = 'ffnnWithpca.h5'
 
-# Memuat scaler, PCA, dan FFNN model
+# Download the files
+download_file_from_drive(scaler_url, scaler_path)
+download_file_from_drive(pca_url, pca_model_path)
+download_file_from_drive(ffnn_url, ffnn_model_path)
+
+# Load the scaler
+print("Loading scaler...")
 scaler = joblib.load(scaler_path)
+
+# Load PCA model
+print("Loading PCA model...")
 pca = joblib.load(pca_model_path)
 
-# Jika model FFNN disimpan dengan format .h5
-from tensorflow.keras.models import load_model
-ffnn_model = load_model(ffnn_model_path)
+# Load the FFNN model
+print("Loading FFNN model...")
+ffnn_model = tf.keras.models.load_model(ffnn_model_path)
 
 # Upload gambar melalui Streamlit
 uploaded_file = st.file_uploader("Unggah gambar untuk prediksi", type=["png", "jpg", "jpeg", "bmp", "gif"])
