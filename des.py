@@ -59,9 +59,12 @@ if uploaded_file is not None:
 
     st.image("temp_image.png", caption="Gambar yang diunggah", use_container_width=True)
 
-    if st.button("Ekstrak Fitur dan Prediksi"):
-        st.write("Memulai ekstraksi fitur...")
-        features = extract_features_from_image("temp_image.png")
+    if os.path.exists("temp_image.png"):
+        print("Image uploaded successfully.")
+        if st.button("Extract Features and Predict"):
+            features = extract_features_from_image("temp_image.png")
+            if features is not None:
+                st.write("Features extracted successfully.")
 
         if features is not None:
             # Standarisasi fitur
@@ -78,7 +81,3 @@ if uploaded_file is not None:
 
             # Tampilkan hasil
             st.write("Hasil prediksi:", prediction[0])
-
-st.write("\n\n---\n**Instruksi:**")
-st.write("1. Unggah gambar dalam format yang didukung (PNG, JPG, JPEG, BMP, GIF).")
-st.write("2. Klik tombol untuk melakukan ekstraksi fitur, PCA, dan prediksi.")
