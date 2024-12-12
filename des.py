@@ -42,9 +42,12 @@ scaler = joblib.load(scaler_path)
 print("Loading PCA model...")
 pca = joblib.load(pca_model_path)
 
-# Load the FFNN model
-print("Loading FFNN model...")
-ffnn_model = tf.keras.models.load_model(ffnn_model_path)
+# Load the FFNN model if it exists
+if os.path.exists(ffnn_model_path):
+    print("Loading FFNN model...")
+    ffnn_model = tf.keras.models.load_model(ffnn_model_path)
+else:
+    print("FFNN model file is missing, cannot load the model.")
 
 # Upload gambar melalui Streamlit
 uploaded_file = st.file_uploader("Unggah gambar untuk prediksi", type=["png", "jpg", "jpeg", "bmp", "gif"])
