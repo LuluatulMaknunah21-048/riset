@@ -10,8 +10,8 @@ import pytz
 # Fungsi untuk mendownload model dari Google Drive
 @st.cache_resource
 def download_model():
-    model_url = "https://drive.google.com/uc?id=1SKfN1wkzUGlreZD1nGV-lOKFMAh6d0pW"
-    output_path = "EFFICIENTNETECA.keras"
+    model_url = "https://drive.google.com/uc?id=1VykBV9O_Rg9wpP1LHbJZeH2gfW96tbOP"
+    output_path = "EFFICIENTNETB0.keras"
     if not os.path.exists(output_path):
         gdown.download(model_url, output_path, quiet=False)
     return output_path
