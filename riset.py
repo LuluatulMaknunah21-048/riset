@@ -61,7 +61,7 @@ if app_mode == "Klasifikasi":
     uploaded_file = st.file_uploader("Unggah gambar X-Ray Anda", type=["jpg", "png", "jpeg"])
 
     if uploaded_file is not None:
-        st.image(uploaded_file, caption="Gambar yang diunggah", use_column_width=True)
+        st.image(uploaded_file, caption="Gambar yang diunggah",use_container_width=True)
         try:
             # Proses gambar
             image = Image.open(uploaded_file).convert("RGB")
