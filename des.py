@@ -57,7 +57,7 @@ if uploaded_file is not None:
     with open("temp_image.png", "wb") as f:
         f.write(uploaded_file.getbuffer())
 
-    st.image("temp_image.png", caption="Gambar yang diunggah", use_column_width=True)
+    st.image("temp_image.png", caption="Gambar yang diunggah", use_container_width=True)
 
     if st.button("Ekstrak Fitur dan Prediksi"):
         st.write("Memulai ekstraksi fitur...")
