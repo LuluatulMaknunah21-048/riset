@@ -96,7 +96,5 @@ if uploaded_file is not None:
                 scaled_features = scaler.transform([features])
                 pca_features = pca.transform(scaled_features)
                 
-                # Tambahkan kode prediksi di sini jika diperlukan, misalnya:
-                # prediction = some_model.predict(pca_features)
-                # st.write(f"Prediksi: {prediction}")
-                st.write("Fitur diproses dengan PCA dan scaling.")
+                prediction = ffnn_model.predict(pca_features)
+                st.write(f"Prediksi: {prediction}")
