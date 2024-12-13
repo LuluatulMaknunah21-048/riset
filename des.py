@@ -64,7 +64,7 @@ def extract_features_from_image(img_path):
         print(f"Error extracting features: {e}")
         return None
 
-st.title("Klasifikasi Gambar")
+st.title("IMPLEMENTASI PRINCIPAL COMPONENT ANALYSIS UNTUK MODIFIKASI ARSITEKTUR RESNET50 PADA KLASIFIKASI COVID-19")
 
 uploaded_file = st.file_uploader("Unggah gambar", type=["png", "jpg", "jpeg", "bmp", "gif"])
 
