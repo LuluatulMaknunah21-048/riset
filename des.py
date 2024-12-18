@@ -33,19 +33,15 @@ download_file_from_drive(pca_url, pca_model_path)
 download_file_from_drive(ffnn_url, ffnn_model_path)
 
 # Load the scaler
-print("Loading scaler...")
 scaler = joblib.load(scaler_path)
 
 # Load PCA model
-print("Loading PCA model...")
 pca = joblib.load(pca_model_path)
 
 # Load the FFNN model
-print("Loading FFNN model...")
 ffnn_model = tf.keras.models.load_model(ffnn_model_path)
 
 # Load ResNet50 for feature extraction
-print("Loading ResNet50 model for feature extraction...")
 resnet_model = ResNet50(weights='imagenet', include_top=False, pooling='avg')
 
 # Function to extract features using ResNet50
