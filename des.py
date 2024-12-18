@@ -84,5 +84,9 @@ if uploaded_file is not None:
             # Predict using FFNN model
             prediction = ffnn_model.predict(scaled_features)
             predicted_class = np.argmax(prediction, axis=1)
-            
-            st.write(f"Prediksi: {predicted_class[0]}")
+            if predicted_class == 0 :
+                st.write("Prediksi: COVID-19")
+            elif predicted_class == 1 :
+                st.write("Prediksi: Pneumonia")
+            if predicted_class == 2 :
+                st.write("Prediksi: Normal")
