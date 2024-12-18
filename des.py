@@ -20,7 +20,7 @@ def download_file_from_drive(url, output_path):
 # URLs of the files stored on Google Drive
 scaler_url = 'https://drive.google.com/uc?id=1-b1sbOb0iPMVbFL7mRAxFokC4yKLt8N4'
 pca_url = 'https://drive.google.com/uc?id=1-NviIjOFmDaldOtJbJLBRYO8vH1qGm5R'
-ffnn_url = 'https://drive.google.com/uc?id=1-bh0Ce3ag9RIonvM8kkWTPDyUiXWthRA'
+ffnn_url = 'https://drive.google.com/uc?id=1-JKNj8KyB1JG4UBO2DOKolpObxvLzpfH'
 
 # Define the paths where the files will be saved locally
 scaler_path = 'scalerWithpca.pkl'
@@ -81,13 +81,12 @@ if uploaded_file is not None:
         features = extract_features_from_image("temp_image.png")
         if features is not None:
             st.write("Fitur berhasil diekstrak.")
-
             # Scale and transform features
             scaled_features = scaler.transform([features])
-            pca_features = pca.transform(scaled_features)
+            #pca_features = pca.transform(scaled_features)
 
             # Predict using FFNN model
-            prediction = ffnn_model.predict(pca_features)
+            prediction = ffnn_model.predict(scaled_features)
             predicted_class = np.argmax(prediction, axis=1)
             
             st.write(f"Prediksi: {predicted_class[0]}")
