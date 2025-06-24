@@ -20,20 +20,20 @@ st.markdown("""
         position: sticky;
         top: 0;
         background-color: #fff;
-        padding: 10px 0;
+        padding: 16px 0;
         box-shadow: 0 1px 5px rgba(0,0,0,0.05);
         z-index: 999;
         display: flex;
         justify-content: center;
-        gap: 10px;
+        gap: 20px;
     }
     .nav-button {
         background-color: #fcefee;
         color: #884c5f;
         border: 1px solid #e7cbd2;
-        padding: 6px 18px;
-        border-radius: 8px;
-        font-size: 14px;
+        padding: 10px 24px;
+        border-radius: 10px;
+        font-size: 16px;
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease;
@@ -48,7 +48,10 @@ st.markdown("""
         background-color: #f9cfd9 !important;
         color: #4d2a33 !important;
         border: 1px solid #e8a5b6 !important;
-        font-weight: 600;
+        font-weight: 700;
+    }
+    a.nav-button {
+        text-decoration: none !important;
     }
     </style>
 """, unsafe_allow_html=True)
