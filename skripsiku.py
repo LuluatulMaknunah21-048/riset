@@ -54,8 +54,6 @@ if selected == "Beranda":
         Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
         menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
     """)
-    st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
-             caption="Contoh Citra Chest X-Ray", width=400)
 
 elif selected == "Klasifikasi":
     st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
@@ -86,7 +84,7 @@ elif selected == "Klasifikasi":
             #img = image.resize((224, 224))
             #img_tensor = tf.convert_to_tensor(img)
            # img_tensor = tf.expand_dims(img_tensor, axis=0)
-            probs = model.predict(image)
+            probs = model.predict(image)[0]
             st.write(probs)
             #pred_index = tf.argmax(probs).numpy()
            # pred_label = class_labels[pred_index]
