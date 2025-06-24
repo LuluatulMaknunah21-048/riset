@@ -23,7 +23,7 @@ elif menu == "KLASIFIKASI":
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert('RGB')
-        st.image(image, caption="Gambar berhasil diunggah", use_column_width=True)
+        st.image(image, caption="Gambar berhasil diunggah", use_container_width=True)
 
 # ==================== VISUALISASI ==================== #
 elif menu == "VISUALISASI":
