@@ -57,7 +57,6 @@ selected = st.session_state["active_page"]
 # ===================== KONTEN TIAP HALAMAN ===========================
 if selected == "Beranda":
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
-    st.markdown("## 👋 Selamat Datang di Aplikasi Klasifikasi Citra X-Ray Dada!")
     
     st.image("https://img.freepik.com/premium-vector/lungs-waving-hand-character_464314-5436.jpg",
              width=400)
