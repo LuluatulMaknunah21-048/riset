@@ -7,62 +7,54 @@ import os
 st.set_page_config(page_title="Klasifikasi Chest X-Ray", layout="wide", page_icon="🩻")
 
 # ======================== GAYA ========================
+# Atas kode Python-mu, tambahkan styling ini:
 st.markdown("""
     <style>
-        .main {
-            background-color: #f7f9fc;
-        }
-        .stButton>button {
-            background-color: #4CAF50;
-            color: white;
-            font-weight: bold;
-            border-radius: 8px;
-            padding: 0.5em 1em;
-        }
-        .stSidebar .sidebar-content {
-            padding: 2rem 1rem;
-        }
-        .sidebar-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .menu-button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75em 1em;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-weight: 500;
-            background-color: #f0f2f6;
-            border: none;
-            color: #333;
-        }
-        .menu-button:hover {
-            background-color: #dce4f0;
-        }
-        .menu-active {
-            background-color: #d0e2ff !important;
-            color: #004b9b !important;
-            font-weight: 600;
-        }
+    .sidebar-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    .menu-button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 8px 16px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-weight: 500;
+        background-color: #f0f2f6;
+        border: none;
+        color: #333333;
+        transition: all 0.2s ease;
+    }
+    .menu-button:hover {
+        background-color: #e0e8f0;
+        color: #0056b3;
+    }
+    .menu-active {
+        background-color: #cfe2ff !important;
+        color: #003d80 !important;
+        font-weight: 600;
+        border-left: 5px solid #297eff;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# ====================== MENU NAVIGASI ====================
-if "menu" not in st.session_state:
-    st.session_state.menu = "Beranda"
-
+# Gunakan ini untuk sidebar-mu:
 st.sidebar.markdown('<div class="sidebar-title">Menu</div>', unsafe_allow_html=True)
 
 menu_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-for option in menu_options:
-    btn_class = "menu-button"
-    if st.session_state.menu == option:
-        btn_class += " menu-active"
-    if st.sidebar.button(option, key=option):
-        st.session_state.menu = option
+if "menu" not in st.session_state:
+    st.session_state.menu = "Beranda"
+
+for label in menu_options:
+    css_class = "menu-button"
+    if st.session_state.menu == label:
+        css_class += " menu-active"
+    if st.sidebar.button(label, key=label):
+        st.session_state.menu = label
 
 # ====================== DOWNLOAD MODEL ===================
 def download_model(file_id, output_path):
