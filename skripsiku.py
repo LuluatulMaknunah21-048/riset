@@ -94,7 +94,7 @@ elif selected == "Klasifikasi":
             img_array = np.array(img)
             img_array = np.expand_dims(img_array, axis=0)
 
-            probs = model.predict(img_array)
+            probs = model.predict(img_array)[0]
             #st.write(probs)
             pred_index = np.argmax(probs)
             pred_label = class_labels[pred_index]
