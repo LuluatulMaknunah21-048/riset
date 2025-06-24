@@ -86,7 +86,7 @@ elif selected == "Klasifikasi":
             img = image.resize((224, 224))
             #img_tensor = tf.convert_to_tensor(img)
            # img_tensor = tf.expand_dims(img_tensor, axis=0)
-            probs = model.predict(img_tensor)[0]
+            probs = model.predict(img)[0]
             pred_index = tf.argmax(probs).numpy()
             pred_label = class_labels[pred_index]
 
