@@ -85,13 +85,12 @@ elif selected == "Klasifikasi":
             #img_tensor = tf.convert_to_tensor(img)
            # img_tensor = tf.expand_dims(img_tensor, axis=0)
             probs = model.predict(image)[0]
-            st.write(probs)
-            #pred_index = tf.argmax(probs).numpy()
-           # pred_label = class_labels[pred_index]
+            pred_index = tf.argmax(probs).numpy()
+            pred_label = class_labels[pred_index]
 
-            #st.success(f"Hasil Prediksi: **{pred_label}**")
-            #for i, label in enumerate(class_labels):
-             #   st.write(f"{label}: {probs[i]*100:.2f}%")
+            st.success(f"Hasil Prediksi: **{pred_label}**")
+            for i, label in enumerate(class_labels):
+                st.write(f"{label}: {probs[i]*100:.2f}%")
 
 elif selected == "Visualisasi":
     st.markdown("<h1 style='color:#884c5f;'>Visualisasi Evaluasi Model</h1>", unsafe_allow_html=True)
