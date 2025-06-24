@@ -117,9 +117,7 @@ elif selected == "Visualisasi":
 elif selected == "Tentang":
     st.markdown("<h1 style='color:#884c5f;'>Tentang Aplikasi</h1>", unsafe_allow_html=True)
     st.write("""
-        Aplikasi ini dikembangkan oleh **Luluatul Maknunah** untuk keperluan skripsi.
-
-        **Tujuan:** Mengklasifikasikan citra X-Ray menjadi tiga kategori: COVID-19, Normal, Pneumonia.  
-        **Model:** EfficientNet-B0 dan modifikasi dengan ECA.  
-        **Pendamping:** Dosen Pembimbing Skripsi
+        Oleh **Luluatul Maknunah** NIM 210411100048 
+        **Dosen Pembimbing 1 :** Prof. Dr. Rima Tri Wahyuningrum, S.T., M.T
+        **Dosen Pembimbing 2 :** Dr. Cucun Very Angkoso, S.T., M.T
     """)
