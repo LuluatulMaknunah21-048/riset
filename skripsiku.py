@@ -58,7 +58,8 @@ selected = st.session_state["active_page"]
 if selected == "Beranda":
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
     st.write("""
-        Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
+        Selamat datang!<br>
+        Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
         menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
     """)
     st.image("https://img.freepik.com/premium-vector/lungs-waving-hand-character_464314-5436.jpg",
