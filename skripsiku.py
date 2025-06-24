@@ -1,4 +1,26 @@
 import streamlit as st
+st.markdown("""
+<style>
+h2 {
+    font-family: 'Segoe UI', sans-serif;
+    color: #333333;
+    margin-bottom: 1rem;
+}
+.stButton>button {
+    background-color: #e0e0e0;
+    color: black;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    border: none;
+}
+.stButton>button:hover {
+    background-color: #c5c5c5;
+    transition: 0.2s ease-in-out;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Inisialisasi state menu jika belum ada
 if "menu" not in st.session_state:
