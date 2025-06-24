@@ -4,52 +4,49 @@ from PIL import Image
 import gdown
 import os
 
-# Inisialisasi state
-if "menu" not in st.session_state:
-    st.session_state.menu = "Beranda"
+st.set_page_config(page_title="Klasifikasi X-Ray", layout="wide")
 
-# Gaya CSS sidebar
-st.sidebar.markdown("""
-    <style>
-    .custom-sidebar .menu-item {
-        padding: 10px 18px;
-        margin-bottom: 6px;
-        border-radius: 6px;
-        font-size: 15px;
-        font-weight: 500;
-        background-color: #f2f4f8;
-        color: #333333;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    .custom-sidebar .menu-item:hover {
-        background-color: #e0e7ef;
-        color: #0056b3;
-    }
-    .custom-sidebar .active {
-        background-color: #d0e2ff;
-        color: #003d80;
-        border-left: 4px solid #2f80ed;
-        font-weight: 600;
-    }
-    </style>
+# === Custom CSS untuk menyulap radio menjadi menu tombol ===
+st.markdown("""
+<style>
+/* Hapus lingkaran radio */
+.css-1c7y2kd, .css-1c7y2kd * {
+    visibility: hidden;
+    height: 0px;
+    margin: 0;
+    padding: 0;
+}
+.css-1c7y2kd:before {
+    display: none !important;
+}
+
+/* Ganti style label jadi seperti tombol */
+.css-10trblm {
+    background-color: #f4f6f9;
+    padding: 10px 20px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    color: #333;
+    font-weight: 500;
+    transition: 0.2s all ease-in-out;
+    cursor: pointer;
+}
+.css-10trblm:hover {
+    background-color: #e0e7ef;
+    color: #0056b3;
+}
+.css-1c7y2kd input:checked + div > label .css-10trblm {
+    background-color: #d0e2ff !important;
+    color: #003d80 !important;
+    font-weight: 600;
+    border-left: 4px solid #2f80ed;
+}
+</style>
 """, unsafe_allow_html=True)
 
-# Sidebar HTML
-st.sidebar.markdown('<div class="sidebar-title"><b>Menu</b></div>', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="custom-sidebar">', unsafe_allow_html=True)
+# === Sidebar menu pakai radio (tapi tampak seperti tombol list) ===
+menu = st.sidebar.radio("Menu", ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"], label_visibility="collapsed")
 
-menu_items = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-
-for item in menu_items:
-    is_active = "active" if st.session_state.menu == item else ""
-    if st.sidebar.markdown(
-        f'<div class="menu-item {is_active}" onclick="window.location.href=\'#{item}\'">{item}</div>',
-        unsafe_allow_html=True,
-    ):
-        st.session_state.menu = item
-
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 # ====================== DOWNLOAD MODEL ===================
 def download_model(file_id, output_path):
     if not os.path.exists(output_path):
