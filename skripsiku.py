@@ -4,58 +4,52 @@ from PIL import Image
 import gdown
 import os
 
-st.set_page_config(page_title="Klasifikasi Chest X-Ray", layout="wide", page_icon="🩻")
+# Inisialisasi state
+if "menu" not in st.session_state:
+    st.session_state.menu = "Beranda"
 
-# ======================== GAYA ========================
-# Atas kode Python-mu, tambahkan styling ini:
-st.markdown("""
+# Gaya CSS sidebar
+st.sidebar.markdown("""
     <style>
-    .sidebar-title {
-        font-size: 18px;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-    .menu-button {
-        display: block;
-        width: 100%;
-        text-align: left;
-        padding: 8px 16px;
-        margin-bottom: 8px;
+    .custom-sidebar .menu-item {
+        padding: 10px 18px;
+        margin-bottom: 6px;
         border-radius: 6px;
         font-size: 15px;
         font-weight: 500;
-        background-color: #f0f2f6;
-        border: none;
+        background-color: #f2f4f8;
         color: #333333;
+        cursor: pointer;
         transition: all 0.2s ease;
     }
-    .menu-button:hover {
-        background-color: #e0e8f0;
+    .custom-sidebar .menu-item:hover {
+        background-color: #e0e7ef;
         color: #0056b3;
     }
-    .menu-active {
-        background-color: #cfe2ff !important;
-        color: #003d80 !important;
+    .custom-sidebar .active {
+        background-color: #d0e2ff;
+        color: #003d80;
+        border-left: 4px solid #2f80ed;
         font-weight: 600;
-        border-left: 5px solid #297eff;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Gunakan ini untuk sidebar-mu:
-st.sidebar.markdown('<div class="sidebar-title">Menu</div>', unsafe_allow_html=True)
+# Sidebar HTML
+st.sidebar.markdown('<div class="sidebar-title"><b>Menu</b></div>', unsafe_allow_html=True)
+st.sidebar.markdown('<div class="custom-sidebar">', unsafe_allow_html=True)
 
-menu_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-if "menu" not in st.session_state:
-    st.session_state.menu = "Beranda"
+menu_items = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
 
-for label in menu_options:
-    css_class = "menu-button"
-    if st.session_state.menu == label:
-        css_class += " menu-active"
-    if st.sidebar.button(label, key=label):
-        st.session_state.menu = label
+for item in menu_items:
+    is_active = "active" if st.session_state.menu == item else ""
+    if st.sidebar.markdown(
+        f'<div class="menu-item {is_active}" onclick="window.location.href=\'#{item}\'">{item}</div>',
+        unsafe_allow_html=True,
+    ):
+        st.session_state.menu = item
 
+st.sidebar.markdown('</div>', unsafe_allow_html=True)
 # ====================== DOWNLOAD MODEL ===================
 def download_model(file_id, output_path):
     if not os.path.exists(output_path):
