@@ -90,8 +90,8 @@ elif selected == "Klasifikasi":
         st.image(image, caption="Gambar yang diunggah", width=300)
 
         if st.button("Prediksi"):
-            #img = image.resize((224, 224))
-            img_array = np.array(image)
+            img = image.resize((224, 224))
+            img_array = np.array(img)
             #img_array = preprocess_input(img_array)
             #img_array = np.expand_dims(img_array, axis=0)
 
