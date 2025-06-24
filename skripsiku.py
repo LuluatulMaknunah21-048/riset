@@ -7,7 +7,7 @@ import os
 st.set_page_config(page_title="Klasifikasi Chest X-Ray", layout="wide")
 
 # ========================= MENU =========================
-menu = st.sidebar.radio("Navigasi", ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"])
+menu = st.sidebar("Pilihan", ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"])
 
 # =================== FUNGSI DOWNLOAD MODEL ===============
 def download_model(file_id, output_path):
