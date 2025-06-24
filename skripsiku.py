@@ -3,6 +3,8 @@ import tensorflow as tf
 from PIL import Image
 import gdown
 import os
+import numpy as np
+from tensorflow.keras.applications.efficientnet import preprocess_input
 
 st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 
@@ -10,50 +12,57 @@ st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 if "active_page" not in st.session_state:
     st.session_state["active_page"] = "Beranda"
 
-# ===================== STYLING SIDEBAR LIST ==================
-st.sidebar.markdown("""
+# ===================== STYLING ==================
+st.markdown("""
     <style>
-    .menu-box {
+    .sidebar-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #884c5f;
+    }
+    div[class^="stButton"] > button {
+        background-color: #f9dce1;
+        color: #884c5f;
+        border: none;
+        border-radius: 8px;
         padding: 10px 16px;
         margin-bottom: 8px;
-        border-radius: 8px;
-        font-weight: 500;
-        color: #884c5f;
-        background-color: #f9dce1;
-        cursor: pointer;
-        transition: background-color 0.2s;
+        width: 100%;
         text-align: left;
+        font-weight: 500;
+        transition: background-color 0.2s;
     }
-    .menu-box:hover {
+    div[class^="stButton"] > button:hover {
         background-color: #f9cfd9;
     }
-    .menu-active {
+    .active {
         background-color: #f7bcc9 !important;
         font-weight: 700;
-        color: #4d2a33;
+        color: #4d2a33 !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# ===================== MENU LIST ==================
+# ===================== MENU SIDEBAR ==================
+st.sidebar.markdown('<div class="sidebar-title">Navigasi</div>', unsafe_allow_html=True)
 menu_list = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
 
 for item in menu_list:
-    style = "menu-box"
-    if st.session_state["active_page"] == item:
-        style += " menu-active"
-    if st.sidebar.markdown(f'<div class="{style}" onclick="window.location.href=\'#{item}\'">{item}</div>', unsafe_allow_html=True):
+    if st.sidebar.button(item, key=item):
         st.session_state["active_page"] = item
 
-# ===================== KONTEN ===========================
 selected = st.session_state["active_page"]
 
+# ===================== KONTEN TIAP HALAMAN ===========================
 if selected == "Beranda":
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
     st.write("""
         Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
         menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
     """)
+    st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
+             caption="Contoh Citra Chest X-Ray", width=400)
 
 elif selected == "Klasifikasi":
     st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
@@ -81,11 +90,13 @@ elif selected == "Klasifikasi":
         st.image(image, caption="Gambar yang diunggah", width=300)
 
         if st.button("Prediksi"):
-            #img = image.resize((224, 224))
-            #img_tensor = tf.convert_to_tensor(img)
-           # img_tensor = tf.expand_dims(img_tensor, axis=0)
-            probs = model.predict(image)[0]
-            pred_index = tf.argmax(probs).numpy()
+            img = image.resize((224, 224))
+            img_array = np.array(img).astype("float32")
+            img_array = preprocess_input(img_array)
+            img_array = np.expand_dims(img_array, axis=0)
+
+            probs = model.predict(img_array)[0]
+            pred_index = np.argmax(probs)
             pred_label = class_labels[pred_index]
 
             st.success(f"Hasil Prediksi: **{pred_label}**")
