@@ -9,18 +9,28 @@ st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 
 # ================== INISIALISASI STATE ==================
 if "active_page" not in st.session_state:
-    st.session_state.active_page = "Beranda"
+    st.session_state["active_page"] = "Beranda"
 
 # ===================== STYLING CSS ======================
 st.markdown("""
     <style>
-    /* Warna dasar aplikasi */
     body {
         background-color: #fdfdfe;
     }
-
-    /* Tombol navbar */
-    .stButton > button {
+    .navbar {
+        position: sticky;
+        top: 0;
+        background-color: #fcefee;
+        padding: 10px;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0px 2px 6px rgba(200, 200, 200, 0.3);
+        border-radius: 0 0 12px 12px;
+        margin-bottom: 20px;
+    }
+    .navbar button {
         background-color: #fcefee;
         color: #884c5f;
         border: none;
@@ -28,30 +38,37 @@ st.markdown("""
         font-size: 15px;
         font-weight: 500;
         padding: 8px 20px;
-        margin: 0 6px;
+        cursor: pointer;
         transition: all 0.2s ease;
     }
-    .stButton > button:hover {
+    .navbar button:hover {
         background-color: #f9dce1;
         color: #63313f;
     }
-    .stButton > button:focus {
+    .navbar button.selected {
         background-color: #f9cfd9 !important;
         color: #4d2a33 !important;
         box-shadow: 0px 0px 0px 2px #f8bfcf;
+        font-weight: 600;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # ===================== NAVBAR ===========================
+st.markdown('<div class="navbar">', unsafe_allow_html=True)
 nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-cols = st.columns(len(nav_options))
+nav_cols = st.columns(len(nav_options))
 for i, option in enumerate(nav_options):
-    if cols[i].button(option, use_container_width=True):
-        st.session_state.active_page = option
+    if st.session_state["active_page"] == option:
+        btn = nav_cols[i].button(option, key=f"nav_{option}")
+        st.markdown(f"<style>div[data-testid='stButton'][key='nav_{option}'] button {{ background-color: #f9cfd9; color: #4d2a33; font-weight:600; }}</style>", unsafe_allow_html=True)
+    else:
+        if nav_cols[i].button(option, key=f"nav_{option}"):
+            st.session_state["active_page"] = option
+st.markdown('</div>', unsafe_allow_html=True)
 
 # ===================== KONTEN ===========================
-selected = st.session_state.active_page
+selected = st.session_state["active_page"]
 
 if selected == "Beranda":
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
@@ -59,8 +76,8 @@ if selected == "Beranda":
         Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
         menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
     """)
-    #st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
-             #caption="Contoh Citra Chest X-Ray", width=400)
+    st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
+             caption="Contoh Citra Chest X-Ray", width=400)
 
 elif selected == "Klasifikasi":
     st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
