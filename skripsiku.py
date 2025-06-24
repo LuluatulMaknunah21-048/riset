@@ -45,7 +45,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ===================== MENU SIDEBAR ==================
-st.sidebar.markdown('<div class="sidebar-title">Navigasi</div>', unsafe_allow_html=True)
+st.sidebar.markdown('<div class="sidebar-title">Menu</div>', unsafe_allow_html=True)
 menu_list = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
 
 for item in menu_list:
