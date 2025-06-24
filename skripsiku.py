@@ -10,17 +10,40 @@ st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 if "active_page" not in st.session_state:
     st.session_state["active_page"] = "Beranda"
 
-# ===================== SIDEBAR NAVIGASI ==================
-st.sidebar.markdown("<h3 style='color:#884c5f;'>Navigasi</h3>", unsafe_allow_html=True)
+# ===================== STYLING SIDEBAR LIST ==================
+st.sidebar.markdown("""
+    <style>
+    .menu-box {
+        padding: 10px 16px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        font-weight: 500;
+        color: #884c5f;
+        background-color: #f9dce1;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        text-align: left;
+    }
+    .menu-box:hover {
+        background-color: #f9cfd9;
+    }
+    .menu-active {
+        background-color: #f7bcc9 !important;
+        font-weight: 700;
+        color: #4d2a33;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-if st.sidebar.button("Beranda"):
-    st.session_state["active_page"] = "Beranda"
-if st.sidebar.button("Klasifikasi"):
-    st.session_state["active_page"] = "Klasifikasi"
-if st.sidebar.button("Visualisasi"):
-    st.session_state["active_page"] = "Visualisasi"
-if st.sidebar.button("Tentang"):
-    st.session_state["active_page"] = "Tentang"
+# ===================== MENU LIST ==================
+menu_list = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
+
+for item in menu_list:
+    style = "menu-box"
+    if st.session_state["active_page"] == item:
+        style += " menu-active"
+    if st.sidebar.markdown(f'<div class="{style}" onclick="window.location.href=\'#{item}\'">{item}</div>', unsafe_allow_html=True):
+        st.session_state["active_page"] = item
 
 # ===================== KONTEN ===========================
 selected = st.session_state["active_page"]
