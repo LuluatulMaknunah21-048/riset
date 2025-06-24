@@ -92,8 +92,7 @@ elif selected == "Klasifikasi":
         if st.button("Prediksi"):
             img = image.resize((224, 224))
             img_array = np.array(img)
-            #img_array = preprocess_input(img_array)
-            #img_array = np.expand_dims(img_array, axis=0)
+            img_array = np.expand_dims(img_array, axis=0)
 
             probs = model.predict(img_array)[0]
             st.write(probs)
