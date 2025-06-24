@@ -91,11 +91,11 @@ elif selected == "Klasifikasi":
 
         if st.button("Prediksi"):
             #img = image.resize((224, 224))
-            #img_array = np.array(img).astype("float32")
+            img_array = np.array(image)
             #img_array = preprocess_input(img_array)
             #img_array = np.expand_dims(img_array, axis=0)
 
-            probs = model.predict(image)[0]
+            probs = model.predict(img_array)[0]
             st.write(probs)
             #pred_index = np.argmax(probs)
             #pred_label = class_labels[pred_index]
