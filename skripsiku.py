@@ -4,89 +4,66 @@ from PIL import Image
 import gdown
 import os
 
-# Konfigurasi halaman
+# ===================== KONFIGURASI =====================
 st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 
-# ======= Simpan status menu aktif ========
+# ================== INISIALISASI STATE ==================
 if "active_page" not in st.session_state:
     st.session_state.active_page = "Beranda"
 
-# ======= Styling Navbar Pastel Estetik ========
+# ===================== STYLING CSS ======================
 st.markdown("""
     <style>
-    /* Global */
+    /* Warna dasar aplikasi */
     body {
         background-color: #fdfdfe;
     }
 
-    /* Navbar container */
-    .navbar {
-        background-color: #fcefee;
-        padding: 12px 24px;
-        border-radius: 12px;
-        display: flex;
-        justify-content: center;
-        gap: 24px;
-        margin-bottom: 30px;
-        box-shadow: 0px 2px 6px rgba(200, 200, 200, 0.3);
-    }
-
-    /* Navbar link style */
-    .nav-item {
-        padding: 8px 20px;
-        border-radius: 8px;
+    /* Tombol navbar */
+    .stButton > button {
         background-color: #fcefee;
         color: #884c5f;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
         font-weight: 500;
-        text-decoration: none;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
+        padding: 8px 20px;
+        margin: 0 6px;
+        transition: all 0.2s ease;
     }
-
-    /* Hover */
-    .nav-item:hover {
+    .stButton > button:hover {
         background-color: #f9dce1;
         color: #63313f;
     }
-
-    /* Active */
-    .active {
+    .stButton > button:focus {
         background-color: #f9cfd9 !important;
         color: #4d2a33 !important;
-        font-weight: 600;
         box-shadow: 0px 0px 0px 2px #f8bfcf;
-    }
-
-    .title-style {
-        font-size: 30px;
-        font-weight: 700;
-        color: #884c5f;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# ======= Navbar HTML ========
-st.markdown('<div class="navbar">', unsafe_allow_html=True)
+# ===================== NAVBAR ===========================
+nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
+cols = st.columns(len(nav_options))
+for i, option in enumerate(nav_options):
+    if cols[i].button(option, use_container_width=True):
+        st.session_state.active_page = option
 
-menu_items = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-for item in menu_items:
-    active = "nav-item active" if st.session_state.active_page == item else "nav-item"
-    if st.markdown(f'<div class="{active}" onclick="window.location.href=\'#{item}\'">{item}</div>', unsafe_allow_html=True):
-        st.session_state.active_page = item
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-# ======= Menentukan halaman aktif (tanpa URL refresh) ========
+# ===================== KONTEN ===========================
 selected = st.session_state.active_page
 
-# ==================== Konten Halaman ======================
 if selected == "Beranda":
-    st.markdown('<h1 class="title-style">Aplikasi Klasifikasi Citra Chest X-Ray</h1>', unsafe_allow_html=True)
-    st.write("Selamat datang! Aplikasi ini membantu mengklasifikasikan citra X-Ray paru-paru menjadi COVID-19, Normal, atau Pneumonia.")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg", caption="Contoh Citra Chest X-Ray", width=400)
+    st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
+    st.write("""
+        Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
+        menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
+    """)
+    st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
+             caption="Contoh Citra Chest X-Ray", width=400)
 
 elif selected == "Klasifikasi":
-    st.markdown('<h1 class="title-style">Klasifikasi X-Ray</h1>', unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
 
     model_choice = st.selectbox("Pilih Model", ["EfficientNet-B0", "EfficientNet-B0 + ECA"])
     if model_choice == "EfficientNet-B0":
@@ -123,15 +100,15 @@ elif selected == "Klasifikasi":
                 st.write(f"{label}: {probs[i]*100:.2f}%")
 
 elif selected == "Visualisasi":
-    st.markdown('<h1 class="title-style">Visualisasi Evaluasi Model</h1>', unsafe_allow_html=True)
-    st.info("Fitur ini akan menampilkan grafik evaluasi seperti akurasi, confusion matrix, dan lainnya.")
+    st.markdown("<h1 style='color:#884c5f;'>Visualisasi Evaluasi Model</h1>", unsafe_allow_html=True)
+    st.info("Fitur visualisasi seperti akurasi, confusion matrix, dan lainnya akan segera ditambahkan.")
 
 elif selected == "Tentang":
-    st.markdown('<h1 class="title-style">Tentang Aplikasi</h1>', unsafe_allow_html=True)
+    st.markdown("<h1 style='color:#884c5f;'>Tentang Aplikasi</h1>", unsafe_allow_html=True)
     st.write("""
-        Aplikasi ini dikembangkan oleh Luluatul Maknunah untuk skripsi klasifikasi penyakit paru berbasis citra X-Ray.
-        
-        - Model: EfficientNet-B0 & EfficientNet-B0 + ECA  
-        - Data: Gambar X-Ray COVID-19, Normal, dan Pneumonia  
-        - Tujuan: Membantu analisis radiografi medis dengan AI
+        Aplikasi ini dikembangkan oleh **Luluatul Maknunah** untuk keperluan skripsi.
+
+        **Tujuan:** Mengklasifikasikan citra X-Ray menjadi tiga kategori: COVID-19, Normal, Pneumonia.  
+        **Model:** EfficientNet-B0 dan modifikasi dengan ECA.  
+        **Pendamping:** Dosen Pembimbing Skripsi
     """)
