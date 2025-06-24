@@ -24,7 +24,6 @@ elif menu == "KLASIFIKASI":
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert('RGB')
         st.image(image, caption="Gambar berhasil diunggah", use_column_width=True)
-        st.info("Gambar berhasil ditampilkan. Proses klasifikasi akan dilakukan nanti oleh admin atau sistem batch.")
 
 # ==================== VISUALISASI ==================== #
 elif menu == "VISUALISASI":
