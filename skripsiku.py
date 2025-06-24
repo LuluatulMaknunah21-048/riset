@@ -34,15 +34,24 @@ if selected == "🏠 Beranda":
     st.image("https://upload.wikimedia.org/wikipedia/commons/8/80/Normal_X-ray_image_of_human_lungs.jpg", 
              caption="Contoh Citra Chest X-Ray", use_container_width=True)
 
-# ========== KLASIFIKASI ==========
 elif selected == "🩻 Klasifikasi":
     st.title("📥 Unggah Citra Chest X-Ray")
 
     uploaded_file = st.file_uploader("Unggah gambar Chest X-Ray (.png/.jpg)", type=["png", "jpg", "jpeg"])
+    
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert('RGB')
-        st.image(image, caption="Gambar berhasil diunggah", use_container_width=True)
-        st.info("Gambar berhasil ditampilkan. Proses klasifikasi akan dilakukan nanti oleh sistem.")
+        
+        col1, col2, col3 = st.columns([1, 2, 1])  # biar gambar muncul di tengah
+        with col2:
+            st.image(image, caption="Gambar berhasil diunggah", width=300)  # tampil lebih kecil
+
+        st.markdown("### 🔮 Siap untuk diprediksi?")
+        pred = st.button("🎯 Prediksi")
+
+        if pred:
+            st.success("Proses klasifikasi akan dilakukan nanti oleh sistem. (fitur akan aktif jika model diaktifkan)")
+
 
 # ========== VISUALISASI ==========
 elif selected == "📊 Visualisasi":
