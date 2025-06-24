@@ -10,9 +10,10 @@ st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 if "active_page" not in st.session_state:
     st.session_state["active_page"] = "Beranda"
 
-# ===================== STYLING CSS ======================
-st.markdown("""
+# ===================== SIDEBAR ===========================
+st.sidebar.markdown("""
     <style>
+    .css-1d391kg { background-color: #fdfdfe; }
     .sidebar .sidebar-content {
         background-color: #fdfdfe;
     }
@@ -40,9 +41,8 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ===================== SIDEBAR ===========================
 nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-selected = st.sidebar.radio("", nav_options, index=nav_options.index(st.session_state["active_page"]))
+selected = st.sidebar.radio("Navigasi", nav_options, index=nav_options.index(st.session_state["active_page"]))
 st.session_state["active_page"] = selected
 
 # ===================== KONTEN ===========================
