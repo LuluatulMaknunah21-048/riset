@@ -4,10 +4,34 @@ from PIL import Image
 import gdown
 import os
 
-st.set_page_config(page_title="Klasifikasi Chest X-Ray", layout="wide")
+# ========================= KONFIGURASI =========================
+st.set_page_config(page_title="Klasifikasi Chest X-Ray", layout="wide", page_icon="🩻")
+st.markdown("""
+    <style>
+        .main {
+            background-color: #f7f9fc;
+        }
+        .stButton>button {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+        .stSelectbox, .stFileUploader, .stTextInput {
+            background-color: white !important;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .title-style {
+            font-size: 32px;
+            font-weight: 700;
+            color: #4B8BBE;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # ========================= MENU =========================
-menu = st.sidebar("Pilihan", ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"])
+menu = st.sidebar.radio("📁 Navigasi", ["🏠 Beranda", "🧠 Klasifikasi", "📊 Visualisasi", "ℹ️ Tentang"])
 
 # =================== FUNGSI DOWNLOAD MODEL ===============
 def download_model(file_id, output_path):
@@ -21,20 +45,21 @@ def load_model(model_path, file_id):
     return tf.keras.models.load_model(model_path)
 
 # ======================== BERANDA ========================
-if menu == "Beranda":
-    st.title("Aplikasi Klasifikasi Citra Chest X-Ray")
+if menu == "🏠 Beranda":
+    st.markdown('<h1 class="title-style">Aplikasi Klasifikasi Citra Chest X-Ray</h1>', unsafe_allow_html=True)
     st.write("""
-        Aplikasi ini dirancang untuk mengklasifikasikan kondisi paru-paru berdasarkan citra X-Ray
-        menggunakan model deep learning.
+        Selamat datang di aplikasi klasifikasi citra X-Ray dada!  
+        Aplikasi ini memanfaatkan teknologi Deep Learning untuk mendeteksi kondisi paru-paru dari citra X-Ray, seperti **COVID-19**, **Pneumonia**, dan **Normal**.
     """)
     st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg", caption="Contoh Citra Chest X-Ray", width=400)
 
 # ======================= KLASIFIKASI ======================
-elif menu == "Klasifikasi":
-    st.title("Klasifikasi Citra Chest X-Ray")
+elif menu == "🧠 Klasifikasi":
+    st.markdown('<h1 class="title-style">Klasifikasi Citra Chest X-Ray</h1>', unsafe_allow_html=True)
 
     # Pilih model
-    model_choice = st.selectbox("Pilih Model Klasifikasi", ["EfficientNet-B0", "EfficientNet-B0 + ECA"])
+    st.subheader("📌 Pilih Model Klasifikasi")
+    model_choice = st.selectbox("Model yang digunakan", ["EfficientNet-B0", "EfficientNet-B0 + ECA"])
     if model_choice == "EfficientNet-B0":
         model_path = "effb0_model.keras"
         file_id = "1MYnpCeIOCDrq_4lkkWL9oTEmSeJPU60x"
@@ -46,17 +71,19 @@ elif menu == "Klasifikasi":
     class_labels = ['COVID-19', 'Normal', 'Pneumonia']
 
     # Upload gambar
+    st.subheader("📤 Unggah Gambar")
     uploaded_file = st.file_uploader("Unggah gambar Chest X-Ray (.png/.jpg)", type=["png", "jpg", "jpeg"])
+    
     if uploaded_file is not None:
         image = Image.open(uploaded_file).convert("RGB")
 
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
-            st.image(image, caption="Gambar yang diunggah", width=300)
+            st.image(image, caption="🖼️ Gambar yang diunggah", width=300)
 
-        if st.button("Prediksi"):
-            with st.spinner("Memproses gambar..."):
-                # Siapkan input
+        st.markdown("---")
+        if st.button("🔍 Prediksi Sekarang"):
+            with st.spinner("🧠 Memproses gambar..."):
                 img = image.resize((224, 224))
                 img_tensor = tf.convert_to_tensor(img)
                 img_tensor = tf.expand_dims(img_tensor, axis=0)
@@ -66,29 +93,31 @@ elif menu == "Klasifikasi":
                 pred_index = tf.argmax(probs).numpy()
                 pred_label = class_labels[pred_index]
 
-                st.success(f"Hasil Prediksi: {pred_label}")
-                st.markdown("**Probabilitas per kelas:**")
+                st.success(f"✅ **Hasil Prediksi: {pred_label}**")
+                st.subheader("📈 Probabilitas per Kelas:")
                 for i, label in enumerate(class_labels):
-                    st.write(f"- {label}: {probs[i]*100:.2f}%")
+                    st.markdown(f"- **{label}**: {probs[i]*100:.2f}%")
 
 # ====================== VISUALISASI ======================
-elif menu == "Visualisasi":
-    st.title("Visualisasi Evaluasi Model")
-    st.info("Fitur visualisasi evaluasi model akan ditambahkan pada versi berikutnya.")
-    st.write("Anda dapat menambahkan grafik akurasi, confusion matrix, atau visualisasi aktivasi layer di sini.")
+elif menu == "📊 Visualisasi":
+    st.markdown('<h1 class="title-style">Visualisasi Evaluasi Model</h1>', unsafe_allow_html=True)
+    st.info("📌 Fitur visualisasi evaluasi model akan tersedia pada versi berikutnya.")
+    st.write("Rencana fitur: grafik akurasi, confusion matrix, visualisasi aktivasi layer, dan lainnya.")
 
 # ======================== TENTANG ========================
-elif menu == "Tentang":
-    st.title("Tentang Aplikasi")
+elif menu == "ℹ️ Tentang":
+    st.markdown('<h1 class="title-style">Tentang Aplikasi</h1>', unsafe_allow_html=True)
     st.write("""
-        Aplikasi ini dikembangkan untuk mendeteksi penyakit paru berdasarkan citra X-Ray
-        menggunakan dua model klasifikasi: EfficientNet-B0 dan versi modifikasi dengan ECA (Efficient Channel Attention).
+        Aplikasi ini dikembangkan sebagai bagian dari penelitian klasifikasi penyakit paru-paru berbasis **Deep Learning**.
 
-        **Fitur Utama:**
-        - Klasifikasi citra COVID-19, Normal, dan Pneumonia
-        - Pilihan dua arsitektur model
-        - UI interaktif dan profesional
+        ### 🔍 Fitur Utama:
+        - Klasifikasi citra **COVID-19**, **Normal**, dan **Pneumonia**
+        - Pilihan model: **EfficientNet-B0** dan **EfficientNet-B0 + ECA**
+        - Antarmuka interaktif dan estetis
 
-        **Pengembang:** Luluatul Maknunah  
-        **Pembimbing:** Dosen Pembimbing Skripsi
+        ### 👤 Pengembang:
+        **Luluatul Maknunah**  
+        Dibimbing oleh: **Dosen Pembimbing Skripsi**
+
+        Sumber data dan model berasal dari repositori publik dan penelitian internal.
     """)
