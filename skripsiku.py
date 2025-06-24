@@ -61,8 +61,8 @@ if selected == "Beranda":
         Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
         menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
     """)
-    st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
-             caption="Contoh Citra Chest X-Ray", width=400)
+    st.image("https://img.freepik.com/premium-vector/lungs-waving-hand-character_464314-5436.jpg",
+             width=400)
 
 elif selected == "Klasifikasi":
     st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
