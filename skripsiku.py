@@ -13,40 +13,34 @@ if "active_page" not in st.session_state:
 # ===================== SIDEBAR ===========================
 st.sidebar.markdown("""
     <style>
-    .css-1d391kg { background-color: #fdfdfe; }
-    .sidebar .sidebar-content {
+    [data-testid="stSidebar"] {
         background-color: #fdfdfe;
     }
-    .sidebar .sidebar-content ul {
-        list-style-type: none;
-        padding-left: 0;
+    section[data-testid="stSidebar"] .stRadio > div {
+        gap: 0.5rem;
     }
-    .sidebar .sidebar-content li a {
-        display: block;
-        padding: 10px 20px;
-        border-radius: 8px;
-        color: #884c5f;
-        text-decoration: none;
-        font-size: 16px;
-    }
-    .sidebar .sidebar-content li a:hover {
+    section[data-testid="stSidebar"] .stRadio label {
         background-color: #f9dce1;
-        color: #63313f;
+        color: #884c5f;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 4px;
+        display: block;
     }
-    .sidebar .sidebar-content li a.selected {
+    section[data-testid="stSidebar"] .stRadio label:hover {
         background-color: #f9cfd9;
-        font-weight: 700;
         color: #4d2a33;
     }
     </style>
 """, unsafe_allow_html=True)
 
-nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-selected = st.sidebar.radio("Navigasi", nav_options, index=nav_options.index(st.session_state["active_page"]))
+st.sidebar.title("📋 Navigasi")
+nav_options = ["🏠 Beranda", "🔍 Klasifikasi", "📊 Visualisasi", "ℹ️ Tentang"]
+selected = st.sidebar.radio("", nav_options, index=nav_options.index("🏠 Beranda") if st.session_state["active_page"] == "Beranda" else nav_options.index(f"🔍 Klasifikasi" if st.session_state["active_page"] == "Klasifikasi" else st.session_state["active_page"]))
 st.session_state["active_page"] = selected
 
 # ===================== KONTEN ===========================
-if selected == "Beranda":
+if selected.startswith("🏠"):
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
     st.write("""
         Selamat datang! Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
@@ -55,7 +49,7 @@ if selected == "Beranda":
     st.image("https://upload.wikimedia.org/wikipedia/commons/8/84/Normal_AP_CXR.jpg",
              caption="Contoh Citra Chest X-Ray", width=400)
 
-elif selected == "Klasifikasi":
+elif selected.startswith("🔍"):
     st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
 
     model_choice = st.selectbox("Pilih Model", ["EfficientNet-B0", "EfficientNet-B0 + ECA"])
@@ -92,11 +86,11 @@ elif selected == "Klasifikasi":
             for i, label in enumerate(class_labels):
                 st.write(f"{label}: {probs[i]*100:.2f}%")
 
-elif selected == "Visualisasi":
+elif selected.startswith("📊"):
     st.markdown("<h1 style='color:#884c5f;'>Visualisasi Evaluasi Model</h1>", unsafe_allow_html=True)
     st.info("Fitur visualisasi seperti akurasi, confusion matrix, dan lainnya akan segera ditambahkan.")
 
-elif selected == "Tentang":
+elif selected.startswith("ℹ️"):
     st.markdown("<h1 style='color:#884c5f;'>Tentang Aplikasi</h1>", unsafe_allow_html=True)
     st.write("""
         Aplikasi ini dikembangkan oleh **Luluatul Maknunah** untuk keperluan skripsi.
