@@ -57,14 +57,21 @@ selected = st.session_state["active_page"]
 # ===================== KONTEN TIAP HALAMAN ===========================
 if selected == "Beranda":
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
-    st.write("""
-        Selamat datang!<br>
-        Aplikasi ini membantu mengklasifikasikan kondisi paru-paru dari citra X-Ray
-        menjadi: **COVID-19**, **Normal**, atau **Pneumonia** menggunakan Deep Learning.
-    """)
+    st.markdown("## 👋 Selamat Datang di Aplikasi Klasifikasi Citra X-Ray Dada!")
+    
     st.image("https://img.freepik.com/premium-vector/lungs-waving-hand-character_464314-5436.jpg",
              width=400)
+    st.write("""
+    Aplikasi ini dirancang untuk melakukan **klasifikasi** citra **X-Ray dada** menggunakan teknologi **Deep Learning**. 
+    Model yang digunakan berbasis arsitektur **EfficientNet-B0** serta versi modifikasinya, yaitu **EfficientNet-ECA**.
+    
+    Model akan mengklasifikasikan citra ke dalam salah satu dari tiga kategori berikut: 
+    **COVID-19**, **Normal**, atau **Pneumonia**.
+    
+    Silakan unggah citra X-Ray Anda pada menu klasifikasi dan lihat hasil klasifikasinya secara langsung!
+    """)
 
+    
 elif selected == "Klasifikasi":
     st.markdown("<h1 style='color:#884c5f;'>Klasifikasi Citra X-Ray</h1>", unsafe_allow_html=True)
 
