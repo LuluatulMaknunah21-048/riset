@@ -17,63 +17,62 @@ st.markdown("""
     body {
         background-color: #fdfdfe;
     }
-    .navbar {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0;
-        background-color: #ffffff;
-        padding: 0.8rem 0;
-        z-index: 999;
+    .navbar-container {
         display: flex;
         justify-content: center;
-        gap: 1rem;
-        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
-        border-bottom: 1px solid #f3dfe5;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: white;
+        padding: 12px 0 8px 0;
+        box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 16px;
     }
-    .navbar button {
+    .nav-button button {
         background-color: #ffffff;
         color: #884c5f;
         border: 1px solid #e7cbd2;
         border-radius: 8px;
         font-size: 15px;
         font-weight: 500;
-        padding: 6px 16px;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        padding: 6px 18px;
+        margin: 0 6px;
+        transition: 0.2s;
     }
-    .navbar button:hover {
+    .nav-button button:hover {
         background-color: #fae6ec;
         border-color: #eabac6;
     }
-    .navbar button.selected {
-        background-color: #f9cfd9 !important;
-        color: #4d2a33 !important;
-        font-weight: 600;
+    .nav-button button.selected {
+        background-color: #f9cfd9;
+        color: #4d2a33;
         border-color: #e8a5b6;
+        font-weight: 600;
     }
     </style>
 """, unsafe_allow_html=True)
 
 # ===================== NAVBAR ===========================
-st.markdown('<div class="navbar">', unsafe_allow_html=True)
+st.markdown('<div class="navbar-container">', unsafe_allow_html=True)
 nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
 nav_cols = st.columns(len(nav_options))
 for i, option in enumerate(nav_options):
     is_selected = st.session_state["active_page"] == option
-    if nav_cols[i].button(option, key=f"nav_{option}"):
-        st.session_state["active_page"] = option
-    if is_selected:
-        st.markdown(f"""
-            <style>
-            div[data-testid="stButton"][key="nav_{option}"] button {{
-                background-color: #f9cfd9 !important;
-                color: #4d2a33 !important;
-                font-weight: 600;
-                border-color: #e8a5b6;
-            }}
-            </style>
-        """, unsafe_allow_html=True)
-
+    btn_key = f"nav_{option}"
+    with nav_cols[i]:
+        if st.button(option, key=btn_key):
+            st.session_state["active_page"] = option
+        if is_selected:
+            st.markdown(f"""
+                <style>
+                div[data-testid="stButton"][key="{btn_key}"] button {{
+                    background-color: #f9cfd9;
+                    color: #4d2a33;
+                    border-color: #e8a5b6;
+                    font-weight: 600;
+                }}
+                </style>
+            """, unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
 # ===================== KONTEN ===========================
