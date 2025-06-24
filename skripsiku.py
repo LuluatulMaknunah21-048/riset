@@ -13,67 +13,39 @@ if "active_page" not in st.session_state:
 # ===================== STYLING CSS ======================
 st.markdown("""
     <style>
-    body {
+    .sidebar .sidebar-content {
         background-color: #fdfdfe;
     }
-    .nav-wrapper {
-        position: sticky;
-        top: 0;
-        background-color: #fff;
-        padding: 16px 0;
-        box-shadow: 0 1px 5px rgba(0,0,0,0.05);
-        z-index: 999;
-        display: flex;
-        justify-content: center;
-        gap: 20px;
+    .sidebar .sidebar-content ul {
+        list-style-type: none;
+        padding-left: 0;
     }
-    .nav-button {
-        background-color: #fcefee;
+    .sidebar .sidebar-content li a {
+        display: block;
+        padding: 10px 20px;
+        border-radius: 8px;
         color: #884c5f;
-        border: 1px solid #e7cbd2;
-        padding: 10px 24px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        text-align: center;
         text-decoration: none;
+        font-size: 16px;
     }
-    .nav-button:hover {
+    .sidebar .sidebar-content li a:hover {
         background-color: #f9dce1;
         color: #63313f;
     }
-    .nav-selected {
-        background-color: #f9cfd9 !important;
-        color: #4d2a33 !important;
-        border: 1px solid #e8a5b6 !important;
+    .sidebar .sidebar-content li a.selected {
+        background-color: #f9cfd9;
         font-weight: 700;
-    }
-    a.nav-button {
-        text-decoration: none !important;
+        color: #4d2a33;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# ===================== NAVBAR ===========================
+# ===================== SIDEBAR ===========================
 nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
-navbar_html = '<div class="nav-wrapper">'
-for page in nav_options:
-    selected_class = "nav-button nav-selected" if st.session_state["active_page"] == page else "nav-button"
-    navbar_html += f'<a href="?page={page}" class="{selected_class}">{page}</a>'
-navbar_html += '</div>'
-st.markdown(navbar_html, unsafe_allow_html=True)
-
-# ===================== HANDLE URL QUERY =================
-params = st.query_params
-if "page" in params:
-    if params["page"] in nav_options:
-        st.session_state["active_page"] = params["page"]
+selected = st.sidebar.radio("", nav_options, index=nav_options.index(st.session_state["active_page"]))
+st.session_state["active_page"] = selected
 
 # ===================== KONTEN ===========================
-selected = st.session_state["active_page"]
-
 if selected == "Beranda":
     st.markdown("<h1 style='color:#884c5f;'>Aplikasi Klasifikasi Citra Chest X-Ray</h1>", unsafe_allow_html=True)
     st.write("""
