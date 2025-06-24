@@ -118,6 +118,8 @@ elif selected == "Tentang":
     st.markdown("<h1 style='color:#884c5f;'>Tentang Aplikasi</h1>", unsafe_allow_html=True)
     st.write("""
         Oleh **Luluatul Maknunah** NIM 210411100048 
+        
         **Dosen Pembimbing 1 :** Prof. Dr. Rima Tri Wahyuningrum, S.T., M.T
+        
         **Dosen Pembimbing 2 :** Dr. Cucun Very Angkoso, S.T., M.T
     """)
