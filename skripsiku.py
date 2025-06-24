@@ -37,6 +37,8 @@ st.markdown("""
         font-weight: 500;
         cursor: pointer;
         transition: all 0.2s ease;
+        text-align: center;
+        text-decoration: none;
     }
     .nav-button:hover {
         background-color: #f9dce1;
@@ -56,19 +58,15 @@ nav_options = ["Beranda", "Klasifikasi", "Visualisasi", "Tentang"]
 navbar_html = '<div class="nav-wrapper">'
 for page in nav_options:
     selected_class = "nav-button nav-selected" if st.session_state["active_page"] == page else "nav-button"
-    navbar_html += f'''
-        <form action="" method="post">
-            <button class="{selected_class}" name="nav" type="submit" value="{page}">{page}</button>
-        </form>
-    '''
+    navbar_html += f'<a href="?page={page}" class="{selected_class}">{page}</a>'
 navbar_html += '</div>'
 st.markdown(navbar_html, unsafe_allow_html=True)
 
-# ===================== HANDLE POST ======================
-if st.query_params.get("nav"):
-    nav = st.query_params.get("nav")
-    if nav in nav_options:
-        st.session_state["active_page"] = nav
+# ===================== HANDLE URL QUERY =================
+params = st.query_params
+if "page" in params:
+    if params["page"] in nav_options:
+        st.session_state["active_page"] = params["page"]
 
 # ===================== KONTEN ===========================
 selected = st.session_state["active_page"]
