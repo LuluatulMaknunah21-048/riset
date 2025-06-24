@@ -104,4 +104,31 @@ elif selected == "Klasifikasi":
 
     uploaded_file = st.file_uploader("Unggah Gambar Chest X-Ray", type=["png", "jpg", "jpeg"])
     if uploaded_file:
-        image = Image.open(uploaded_file).convert(
+        image = Image.open(uploaded_file).convert("RGB")
+        st.image(image, caption="Gambar yang diunggah", width=300)
+
+        if st.button("Prediksi"):
+            img = image.resize((224, 224))
+            img_tensor = tf.convert_to_tensor(img)
+            img_tensor = tf.expand_dims(img_tensor, axis=0)
+            probs = model.predict(img_tensor)[0]
+            pred_index = tf.argmax(probs).numpy()
+            pred_label = class_labels[pred_index]
+
+            st.success(f"Hasil Prediksi: **{pred_label}**")
+            for i, label in enumerate(class_labels):
+                st.write(f"{label}: {probs[i]*100:.2f}%")
+
+elif selected == "Visualisasi":
+    st.markdown("<h1 style='color:#884c5f;'>Visualisasi Evaluasi Model</h1>", unsafe_allow_html=True)
+    st.info("Fitur visualisasi seperti akurasi, confusion matrix, dan lainnya akan segera ditambahkan.")
+
+elif selected == "Tentang":
+    st.markdown("<h1 style='color:#884c5f;'>Tentang Aplikasi</h1>", unsafe_allow_html=True)
+    st.write("""
+        Aplikasi ini dikembangkan oleh **Luluatul Maknunah** untuk keperluan skripsi.
+
+        **Tujuan:** Mengklasifikasikan citra X-Ray menjadi tiga kategori: COVID-19, Normal, Pneumonia.  
+        **Model:** EfficientNet-B0 dan modifikasi dengan ECA.  
+        **Pendamping:** Dosen Pembimbing Skripsi
+    """)
