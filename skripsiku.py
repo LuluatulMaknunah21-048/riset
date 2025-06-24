@@ -90,18 +90,19 @@ elif selected == "Klasifikasi":
         st.image(image, caption="Gambar yang diunggah", width=300)
 
         if st.button("Prediksi"):
-            img = image.resize((224, 224))
-            img_array = np.array(img).astype("float32")
-            img_array = preprocess_input(img_array)
-            img_array = np.expand_dims(img_array, axis=0)
+            #img = image.resize((224, 224))
+            #img_array = np.array(img).astype("float32")
+            #img_array = preprocess_input(img_array)
+            #img_array = np.expand_dims(img_array, axis=0)
 
-            probs = model.predict(img_array)[0]
-            pred_index = np.argmax(probs)
-            pred_label = class_labels[pred_index]
+            probs = model.predict(image)
+            st.write(probs)
+            #pred_index = np.argmax(probs)
+            #pred_label = class_labels[pred_index]
 
-            st.success(f"Hasil Prediksi: **{pred_label}**")
-            for i, label in enumerate(class_labels):
-                st.write(f"{label}: {probs[i]*100:.2f}%")
+            #st.success(f"Hasil Prediksi: **{pred_label}**")
+            #for i, label in enumerate(class_labels):
+               # st.write(f"{label}: {probs[i]*100:.2f}%")
 
 elif selected == "Visualisasi":
     st.markdown("<h1 style='color:#884c5f;'>Visualisasi Evaluasi Model</h1>", unsafe_allow_html=True)
