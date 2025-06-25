@@ -97,7 +97,7 @@ elif selected == "Klasifikasi":
         st.image(image, caption="Gambar yang diunggah", width=300)
 
         if st.button("Prediksi"):
-            img = image.resize((224, 224))
+            img = image.resize((224, 224)).Convert('RGB')
             img_array = np.array(img)
             img_array = np.expand_dims(img_array, axis=0)
 
