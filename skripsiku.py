@@ -4,7 +4,6 @@ from PIL import Image
 import gdown
 import os
 import numpy as np
-from tensorflow.keras.applications.efficientnet import preprocess_input
 
 st.set_page_config(page_title="Klasifikasi Citra X-Ray", layout="wide")
 
