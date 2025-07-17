@@ -114,7 +114,7 @@ elif selected == "Visualisasi":
     st.subheader("Perbandingan Akurasi Model")
 
     # Tampilkan gambar grafik akurasi
-    st.image("akurasi.png", caption="Perbandingan Akurasi EfficientNet-B0 dan EfficientNet-ECA", use_column_width=True)
+    st.image("akurasi.png", caption="Perbandingan Akurasi EfficientNet-B0 dan EfficientNet-ECA", width=300)
 
     st.write("""
     Berdasarkan grafik di atas, model **EfficientNet-ECA** menunjukkan akurasi pengujian sebesar **93%**, 
