@@ -111,7 +111,20 @@ elif selected == "Klasifikasi":
 
 elif selected == "Visualisasi":
     st.markdown("<h1 style='color:#884c5f;'>Visualisasi Evaluasi Model</h1>", unsafe_allow_html=True)
-    st.info("Fitur visualisasi seperti akurasi, confusion matrix, dan lainnya akan segera ditambahkan.")
+    st.subheader("Perbandingan Akurasi Model")
+
+    # Tampilkan gambar grafik akurasi
+    st.image("akurasi.png", caption="Perbandingan Akurasi EfficientNet-B0 dan EfficientNet-ECA", use_column_width=True)
+
+    st.write("""
+    Berdasarkan grafik di atas, model **EfficientNet-ECA** menunjukkan akurasi pengujian sebesar **93%**, 
+    sedikit lebih tinggi dibandingkan dengan **EfficientNet-B0** yang memiliki akurasi **92%**.
+
+    Hal ini menunjukkan bahwa penambahan **mekanisme perhatian saluran (channel attention)** melalui blok **ECA (Efficient Channel Attention)** 
+    mampu meningkatkan kinerja model dalam mengenali citra X-Ray dada.
+    """)
+
+
 
 elif selected == "Tentang":
     st.markdown("<h1 style='color:#884c5f;'>Tentang Aplikasi</h1>", unsafe_allow_html=True)
